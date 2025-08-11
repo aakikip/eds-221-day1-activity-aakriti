@@ -1,0 +1,79 @@
+---
+title: "stl_lead_inequity"
+format: html
+editor: visual
+---
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+library(janitor)
+```
+
+```{r}
+#read data
+stl_lead <- read_csv(here::here("data", "stl_blood_lead.csv"))
+
+```
+
+```{r}
+#clean names
+
+stl_lead <- stl_lead |> 
+  clean_names()
+
+names(stl_lead)
+
+```
+
+```{r}
+summary(stl_lead)
+
+```
+
+```{r}
+library(dplyr)
+```
+
+```{r}
+#df_with_new_col <- df %>%
+  #mutate( = col_a / col_b)
+
+stl_lead_pop <- stl_lead |>
+  mutate(pop_white = (white/total_pop)*100)
+```
+
+```{r}
+names(stl_lead_pop)
+```
+
+```{r}
+stl_lead_pop_plot <- ggplot(data = stl_lead_pop, aes(x = pct_elevated, y = pop_white, color = "red")) +
+  geom_jitter() +
+  labs(title = "Percent of children",
+       x = "Elevated blood lead levels",
+       y = "Percent of each census tract")
+
+stl_lead_pop_plot
+```
+
+```{r}
+ggsave(here::here("figs", "stl_lead_pop_plot.png"), height = 6, width = 5)
+```
+
+
+```{r}
+stl_lead_pop_plot1 <- ggplot(data = stl_lead_pop, aes(x = pct_elevated, color = "green")) +
+  geom_histogram() +
+  labs(title = "Percent of children",
+       x = "Elevated blood lead levels")
+
+stl_lead_pop_plot1
+
+```
+```{r}
+ggsave(here::here("figs", "stl_lead_pop_plot1.jpg"))
+```
+
